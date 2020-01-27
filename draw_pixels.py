@@ -1,17 +1,29 @@
-import numpy
-from PIL import Image
+from PIL import Image, ImageDraw
 
 COORDINATES_FILE = "mouse_positions.txt"
 
 def main():
-    data = numpy.zeros((1080, 1920, 3), dtype=numpy.uint8)
+    # Create image
+    img = Image.new('RGBA', (1920, 1080), (255,255,255,255))
+    draw = ImageDraw.Draw(img)
 
     cf = open(COORDINATES_FILE, "r")
+
+    prev_pos = format_pos(cf.readline())
+
     for line in cf:
-        pos = line.rstrip().split(",")
-        pos = (int(pos[1]), int(pos[0]))
-        data[pos] = [255,0,0]
-    image = Image.fromarray(data)
-    image.show()
+        curr_pos = format_pos(line)
+
+        draw.line((prev_pos, curr_pos), fill=255)
+        prev_pos = curr_pos
+
+    cf.close()
+    img.show()
+
+def format_pos(line):
+    split = line.rstrip().split(",")
+    return int(split[0]), int(split[1])
+
+
 main()
 
