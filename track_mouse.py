@@ -4,7 +4,7 @@ SAVE_FILE = "mouse_positions.txt"
 SAVE_BEFORE_WRITE = 1000
 
 def main():
-    last_pos = (100,100)
+    last_pos = (-1,-1)
     last_1000 = []
     while last_pos != (0,0):
         data = display.Display().screen().root.query_pointer()._data

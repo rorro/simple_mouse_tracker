@@ -4,7 +4,7 @@ COORDINATES_FILE = "mouse_positions.txt"
 
 def main():
     # Create image
-    img = Image.new('RGBA', (1920, 1080), (255,255,255,255))
+    img = Image.new('RGBA', (1920, 1080), (255,255,255,0))
     draw = ImageDraw.Draw(img)
 
     cf = open(COORDINATES_FILE, "r")
@@ -14,7 +14,7 @@ def main():
     for line in cf:
         curr_pos = format_pos(line)
 
-        draw.line((prev_pos, curr_pos), fill=255)
+        draw.line((prev_pos, curr_pos), fill="black")
         prev_pos = curr_pos
 
     cf.close()
