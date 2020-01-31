@@ -2,12 +2,12 @@ from PIL import Image, ImageDraw
 
 COORDINATES_FILE = "mouse_positions.txt"
 
-def main():
+def draw(coordinates_file):
     # Create image
     img = Image.new('RGBA', (1920, 1080), (255,255,255,0))
     draw = ImageDraw.Draw(img)
 
-    cf = open(COORDINATES_FILE, "r")
+    cf = open(coordinates_file, "r")
 
     prev_pos = format_pos(cf.readline())
 
@@ -25,5 +25,4 @@ def format_pos(line):
     return int(split[0]), int(split[1])
 
 
-main()
 
