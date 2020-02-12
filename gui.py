@@ -1,54 +1,43 @@
-import PySimpleGUI as sg
-import track_mouse
-from draw_pixels import *
-import threading
+import tkinter as tk
 
-sg.theme('Topanga')
+from track_mouse import *
 
-track_btn = sg.Button('Start tracking')
-tracked_txt = sg.Text('Tracked: 0', size=(15,1))
-layout = [  [track_btn, tracked_txt],
-            [sg.Button('Draw stuff')],
-            [sg.Button('Quit')] ]
+is_tracking = False
 
-# Create the Window
-window = sg.Window('Simple Mouse Tracker', layout, size=(300, 200))
+window = tk.Tk()
+window.geometry("320x300")
+window.title("Simple Mouse Tracker")
 
-tracking_mouse = False
-mouse_tracker = track_mouse.MouseTracker()
+tracked_lbl = tk.Label(window, text="Status: Inactive")
+tracked_lbl.grid(column=1, row=0)
 
-# Event Loop to process "events" and get the "values" of the inputs
-while True:
-    event, values = window.read()
+def start_tracking():
+    global is_tracking
+    if not is_tracking:
+        tracked_lbl.configure(text="Status: Tracking")
+        track_btn.configure(text="Stop tracking")
+        is_tracking = True
+    else:
+        tracked_lbl.configure(text="Status: Inactive")
+        track_btn.configure(text="Start tracking")
+        is_tracking = False
 
-    if event in (None, 'Quit'):	# if user closes window or clicks cancel
-        if tracking_mouse:
-            tracking_mouse = False
-            mouse_tracker.terminate()
-            mouse_tracker.thread.join()
-        break
+def draw_stuff():
+    print("Draw stuff")
 
-    elif event in ('Start tracking'):
-        if not tracking_mouse:
-            tracking_mouse = True
-            track_btn.Update("Stop tracking")
-            mouse_tracker = track_mouse.MouseTracker()
-            tracked_txt.update("Tracked: Tracking")
-            mouse_tracker.thread.start()
-        else:
-            tracking_mouse = False
-            track_btn.Update("Start tracking")
-            tracked_txt.update("Tracked: " + str(mouse_tracker.tracked))
-            mouse_tracker.terminate()
-            mouse_tracker.thread.join()
+def quit():
+    global window
+    window.quit()
+    print("exit app")
 
-    elif event in ('Draw stuff'):
-        file_path = sg.PopupGetFile(
-                "Select a valid .tracked file.",
-                title="File to draw",
-                file_types=(("Tracked","*.tracked"),))
 
-        if file_path != '' and file_path != None:
-            draw(file_path)
+track_btn = tk.Button(window, text="Start tracking", command=start_tracking)
+track_btn.grid(column=0, row=0, sticky="W")
 
-window.close()
+draw_btn = tk.Button(window, text="Draw stuff", command=draw_stuff)
+draw_btn.grid(column=0, row=1, sticky="W")
+
+quit_btn = tk.Button(window, text="Quit", command=quit)
+quit_btn.grid(column=0, row=2, sticky="W")
+
+window.mainloop()
