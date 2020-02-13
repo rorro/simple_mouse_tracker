@@ -1,6 +1,10 @@
 import tkinter as tk
+from tkinter import filedialog
 
-from track_mouse import *
+import track_mouse
+import draw_pixels
+
+mt = track_mouse.MouseTracker()
 
 is_tracking = False
 
@@ -13,22 +17,40 @@ tracked_lbl.grid(column=1, row=0)
 
 def start_tracking():
     global is_tracking
+    global mt
+
     if not is_tracking:
+        is_tracking = True
         tracked_lbl.configure(text="Status: Tracking")
         track_btn.configure(text="Stop tracking")
-        is_tracking = True
+        mt = track_mouse.MouseTracker()
+        mt.thread.start()
+
     else:
+        is_tracking = False
         tracked_lbl.configure(text="Status: Inactive")
         track_btn.configure(text="Start tracking")
-        is_tracking = False
+        mt.terminate()
+        mt.thread.join()
 
 def draw_stuff():
-    print("Draw stuff")
+    file_path = filedialog.askopenfilename(
+            title = "Select file",
+            filetypes = (("Tracked","*.tracked"),))
+
+    if file_path != '' and file_path != None:
+        draw_pixels.draw(file_path)
 
 def quit():
     global window
+    global is_tracking
+
+    if is_tracking:
+        is_tracking = False
+        mt.terminate()
+        mt.thread.join()
+
     window.quit()
-    print("exit app")
 
 
 track_btn = tk.Button(window, text="Start tracking", command=start_tracking)
