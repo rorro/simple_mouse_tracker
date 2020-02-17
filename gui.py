@@ -4,62 +4,87 @@ from tkinter import filedialog
 import track_mouse
 import draw_pixels
 
-mt = track_mouse.MouseTracker()
+class MainWindow:
+    def __init__(self, parent):
+        self.mt = track_mouse.MouseTracker()
 
-is_tracking = False
+        self.is_tracking = False
 
-window = tk.Tk()
-window.geometry("320x300")
-window.title("Simple Mouse Tracker")
+        self.parent = parent
+        parent.title("SMT")
+        parent.configure(bg="red")
+        parent.resizable(False, False)
 
-tracked_lbl = tk.Label(window, text="Status: Inactive")
-tracked_lbl.grid(column=1, row=0)
+        self.status_lbl = tk.Label(parent, text="Status: Stopped", fg="red", bg="#FFFFFF")
+        self.status_lbl.pack(side=(tk.BOTTOM), fill=tk.X)
 
-def start_tracking():
-    global is_tracking
-    global mt
+        self.track_btn = tk.Button(parent,
+                text="Start tracking",
+                command=self.start_tracking,
+                bg="#0097A7",
+                fg="#FFFFFF",
+                relief=tk.FLAT,
+                activebackground="#0087A7",
+                activeforeground="#FFFFFF")
+        self.track_btn.grid_propagate(False)
 
-    if not is_tracking:
-        is_tracking = True
-        tracked_lbl.configure(text="Status: Tracking")
-        track_btn.configure(text="Stop tracking")
-        mt = track_mouse.MouseTracker()
-        mt.thread.start()
+        self.track_btn.pack(fill=tk.X)
 
-    else:
-        is_tracking = False
-        tracked_lbl.configure(text="Status: Inactive")
-        track_btn.configure(text="Start tracking")
-        mt.terminate()
-        mt.thread.join()
+        self.draw_btn = tk.Button(parent,
+                text="Draw stuff",
+                command=self.draw_stuff,
+                bg="#0097A7",
+                fg="#FFFFFF",
+                relief=tk.FLAT,
+                activebackground="#0087A7",
+                activeforeground="#FFFFFF")
 
-def draw_stuff():
-    file_path = filedialog.askopenfilename(
-            title = "Select file",
-            filetypes = (("Tracked","*.tracked"),))
+        self.draw_btn.pack(fill=tk.X)
 
-    if file_path != '' and file_path != None:
-        draw_pixels.draw(file_path)
+        self.quit_btn = tk.Button(parent,
+                text="Quit",
+                command=self.quit,
+                bg="#0097A7",
+                fg="#FFFFFF",
+                relief=tk.FLAT,
+                activebackground="#0087A7",
+                activeforeground="#FFFFFF")
 
-def quit():
-    global window
-    global is_tracking
+        self.quit_btn.pack(fill=tk.X)
 
-    if is_tracking:
-        is_tracking = False
-        mt.terminate()
-        mt.thread.join()
+    def start_tracking(self):
+        if not self.is_tracking:
+            self.is_tracking = True
+            self.status_lbl.configure(text="Status: Tracking", fg="green")
+            self.track_btn.configure(text="Stop tracking")
+            self.mt = track_mouse.MouseTracker()
+            self.mt.thread.start()
 
-    window.quit()
+        else:
+            self.is_tracking = False
+            self.status_lbl.configure(text="Status: Stopped", fg="red")
+            self.track_btn.configure(text="Start tracking")
+            self.mt.terminate()
+            self.mt.thread.join()
+
+    def draw_stuff(self):
+        file_path = filedialog.askopenfilename(
+                title = "Select file",
+                filetypes = (("Tracked","*.tracked"),))
+
+        if file_path:
+            draw_pixels.draw(file_path)
+
+    def quit(self):
+        if self.is_tracking:
+            self.is_tracking = False
+            self.mt.terminate()
+            self.mt.thread.join()
+
+        self.parent.quit()
 
 
-track_btn = tk.Button(window, text="Start tracking", command=start_tracking)
-track_btn.grid(column=0, row=0, sticky="W")
-
-draw_btn = tk.Button(window, text="Draw stuff", command=draw_stuff)
-draw_btn.grid(column=0, row=1, sticky="W")
-
-quit_btn = tk.Button(window, text="Quit", command=quit)
-quit_btn.grid(column=0, row=2, sticky="W")
-
-window.mainloop()
+if __name__ == '__main__':
+    root = tk.Tk()
+    main_window = MainWindow(root)
+    root.mainloop()

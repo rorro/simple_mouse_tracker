@@ -7,18 +7,20 @@ def draw(coordinates_file):
     img = Image.new('RGBA', (1920, 1080), (255,255,255,0))
     draw = ImageDraw.Draw(img)
 
-    cf = open(coordinates_file, "r")
+    try:
+        cf = open(coordinates_file, "r")
+        prev_pos = format_pos(cf.readline())
 
-    prev_pos = format_pos(cf.readline())
+        for line in cf:
+            curr_pos = format_pos(line)
 
-    for line in cf:
-        curr_pos = format_pos(line)
+            draw.line((prev_pos, curr_pos), fill="black")
+            prev_pos = curr_pos
 
-        draw.line((prev_pos, curr_pos), fill="black")
-        prev_pos = curr_pos
-
-    cf.close()
-    img.show()
+        cf.close()
+        img.show()
+    except:
+        print("File is empty or has bad contents!")
 
 def format_pos(line):
     split = line.rstrip().split(",")
