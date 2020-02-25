@@ -1,5 +1,6 @@
 import tkinter as tk
 from tkinter import filedialog
+from system_hotkey import SystemHotkey
 
 import track_mouse
 import draw_pixels
@@ -7,12 +8,12 @@ import draw_pixels
 class MainWindow:
     def __init__(self, parent):
         self.mt = track_mouse.MouseTracker()
+        self.hk = SystemHotkey()
 
         self.is_tracking = False
 
         self.parent = parent
         parent.title("SMT")
-        parent.configure(bg="red")
         parent.resizable(False, False)
 
         self.status_lbl = tk.Label(parent, text="Status: Stopped", fg="red", bg="#FFFFFF")
@@ -25,9 +26,10 @@ class MainWindow:
                 fg="#FFFFFF",
                 relief=tk.FLAT,
                 activebackground="#0087A7",
-                activeforeground="#FFFFFF")
-        self.track_btn.grid_propagate(False)
+                activeforeground="#FFFFFF",
+                width=10)
 
+        self.track_btn.grid_propagate(False)
         self.track_btn.pack(fill=tk.X)
 
         self.draw_btn = tk.Button(parent,
@@ -52,7 +54,14 @@ class MainWindow:
 
         self.quit_btn.pack(fill=tk.X)
 
-    def start_tracking(self):
+        parent.bind("<Control-s>", self.start_tracking)
+        parent.bind("<Control-q>", self.quit)
+        parent.bind("<Control-d>", self.draw_stuff)
+
+        self.hk.register(['control', 's'], callback=self.start_tracking)
+
+
+    def start_tracking(self, event=""):
         if not self.is_tracking:
             self.is_tracking = True
             self.status_lbl.configure(text="Status: Tracking", fg="green")
@@ -67,7 +76,7 @@ class MainWindow:
             self.mt.terminate()
             self.mt.thread.join()
 
-    def draw_stuff(self):
+    def draw_stuff(self, event=""):
         file_path = filedialog.askopenfilename(
                 title = "Select file",
                 filetypes = (("Tracked","*.tracked"),))
@@ -75,7 +84,7 @@ class MainWindow:
         if file_path:
             draw_pixels.draw(file_path)
 
-    def quit(self):
+    def quit(self, event=""):
         if self.is_tracking:
             self.is_tracking = False
             self.mt.terminate()

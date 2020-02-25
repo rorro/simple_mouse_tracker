@@ -1,7 +1,5 @@
 from PIL import Image, ImageDraw
 
-COORDINATES_FILE = "mouse_positions.txt"
-
 def draw(coordinates_file):
     # Create image
     img = Image.new('RGBA', (1920, 1080), (255,255,255,0))
