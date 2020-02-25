@@ -1,6 +1,7 @@
 import tkinter as tk
 from tkinter import filedialog
 from system_hotkey import SystemHotkey
+import constants
 
 import track_mouse
 import draw_pixels
@@ -8,7 +9,10 @@ import draw_pixels
 class MainWindow:
     def __init__(self, parent):
         self.mt = track_mouse.MouseTracker()
+
         self.hk = SystemHotkey()
+        self.hk.register(constants.START_TRACKING_BINDING,
+                callback=self.start_tracking)
 
         self.is_tracking = False
 
@@ -53,13 +57,6 @@ class MainWindow:
                 activeforeground="#FFFFFF")
 
         self.quit_btn.pack(fill=tk.X)
-
-        parent.bind("<Control-s>", self.start_tracking)
-        parent.bind("<Control-q>", self.quit)
-        parent.bind("<Control-d>", self.draw_stuff)
-
-        self.hk.register(['control', 's'], callback=self.start_tracking)
-
 
     def start_tracking(self, event=""):
         if not self.is_tracking:

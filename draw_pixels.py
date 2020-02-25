@@ -23,6 +23,3 @@ def draw(coordinates_file):
 def format_pos(line):
     split = line.rstrip().split(",")
     return int(split[0]), int(split[1])
-
-
-
