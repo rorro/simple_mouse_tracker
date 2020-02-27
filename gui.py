@@ -1,17 +1,19 @@
 import tkinter as tk
 from tkinter import filedialog
-from system_hotkey import SystemHotkey
-import constants
 
+from system_hotkey import SystemHotkey
+
+import config
 import track_mouse
 import draw_pixels
 
 class MainWindow:
     def __init__(self, parent):
+        self.config = config.Config()
         self.mt = track_mouse.MouseTracker()
 
         self.hk = SystemHotkey()
-        self.hk.register(constants.START_TRACKING_BINDING,
+        self.hk.register(self.config.start_tracking_binding,
                 callback=self.start_tracking)
 
         self.is_tracking = False
@@ -63,7 +65,7 @@ class MainWindow:
             self.is_tracking = True
             self.status_lbl.configure(text="Status: Tracking", fg="green")
             self.track_btn.configure(text="Stop tracking")
-            self.mt = track_mouse.MouseTracker()
+            self.mt = track_mouse.MouseTracker(self.config.save_folder)
             self.mt.thread.start()
 
         else:
