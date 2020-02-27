@@ -1,5 +1,6 @@
 import tkinter as tk
 from tkinter import filedialog
+from tkinter import PhotoImage
 
 from system_hotkey import SystemHotkey
 
@@ -21,6 +22,9 @@ class MainWindow:
         self.parent = parent
         parent.title("SMT")
         parent.resizable(False, False)
+
+        icon = PhotoImage(file="icon.png")
+        parent.tk.call('wm', 'iconphoto', parent._w, icon)
 
         self.status_lbl = tk.Label(parent, text="Status: Stopped", fg="red", bg="#FFFFFF")
         self.status_lbl.pack(side=(tk.BOTTOM), fill=tk.X)

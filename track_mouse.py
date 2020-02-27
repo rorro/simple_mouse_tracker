@@ -21,8 +21,6 @@ class MouseTracker():
         self.tracked = 0
 
     def start(self):
-        print(self.save_folder)
-
         self.running = True
         last_pos = (-1,-1)
 
@@ -38,8 +36,6 @@ class MouseTracker():
                 mouse_x, mouse_y = self.mouse.position()
 
                 if last_pos != (mouse_x, mouse_y):
-                    #print("x = %i y = %i n=%i" % (mouse_x,mouse_y,self.tracked))
-
                     sf.write(str(mouse_x)+","+str(mouse_y)+"\n")
                     last_pos = (mouse_x, mouse_y)
                     self.tracked+=1

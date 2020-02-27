@@ -29,7 +29,6 @@ class Config():
             config.write("\n".join(self.DEFAULT_CONFIG))
             config.close()
         else:
-            print("Config found.")
             config = open(self.CONFIG_FILE, "r")
 
             for line in config:
@@ -38,7 +37,6 @@ class Config():
                     continue
 
                 split = line.split("=")
-                print("split", split)
                 lhs = split[0]
                 rhs = split[1]
 
