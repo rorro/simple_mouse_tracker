@@ -81,6 +81,7 @@ class MainWindow:
 
     def draw_stuff(self, event=""):
         file_path = filedialog.askopenfilename(
+                initialdir = self.config.save_folder,
                 title = "Select file",
                 filetypes = (("Tracked","*.tracked"),))
 
