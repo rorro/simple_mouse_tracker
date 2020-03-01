@@ -1,8 +1,8 @@
 from PIL import Image, ImageDraw
 
-def draw(coordinates_file):
+def draw(coordinates_file, screen_size):
     # Create image
-    img = Image.new('RGBA', (1920, 1080), (255,255,255,0))
+    img = Image.new('RGBA', screen_size, (255,255,255,0))
     draw = ImageDraw.Draw(img)
 
     try:

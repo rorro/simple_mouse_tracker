@@ -26,6 +26,8 @@ class MainWindow:
         icon = PhotoImage(file="icon.png")
         parent.tk.call('wm', 'iconphoto', parent._w, icon)
 
+        self.screen_size = (parent.winfo_screenwidth(), parent.winfo_screenheight())
+
         self.status_lbl = tk.Label(parent, text="Status: Stopped", fg="red", bg="#FFFFFF")
         self.status_lbl.pack(side=(tk.BOTTOM), fill=tk.X)
 
@@ -86,7 +88,8 @@ class MainWindow:
                 filetypes = (("Tracked","*.tracked"),))
 
         if file_path:
-            draw_pixels.draw(file_path)
+            print("screen size", self.screen_size)
+            draw_pixels.draw(file_path, self.screen_size)
 
     def quit(self, event=""):
         if self.is_tracking:
