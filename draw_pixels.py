@@ -16,7 +16,8 @@ def draw(coordinates_file, screen_size):
             prev_pos = curr_pos
 
         cf.close()
-        img.show()
+
+        img.save(coordinates_file, "png")
     except:
         print("File is empty or has bad contents!")
 

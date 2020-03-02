@@ -88,7 +88,6 @@ class MainWindow:
                 filetypes = (("Tracked","*.tracked"),))
 
         if file_path:
-            print("screen size", self.screen_size)
             draw_pixels.draw(file_path, self.screen_size)
 
     def quit(self, event=""):
