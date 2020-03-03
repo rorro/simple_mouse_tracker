@@ -29,7 +29,7 @@ class MainWindow:
                 parent.winfo_screenheight())
 
         self.status_lbl = tk.Label(parent,
-                text="Status: Stopped",
+                text="● Stopped",
                 fg="red",
                 bg="#d9d9d9",
                 relief=tk.SUNKEN)
@@ -78,14 +78,14 @@ class MainWindow:
     def start_tracking(self, event=""):
         if not self.is_tracking:
             self.is_tracking = True
-            self.status_lbl.configure(text="Status: Tracking", fg="green")
+            self.status_lbl.configure(text="● Tracking", fg="green")
             self.track_btn.configure(text="Stop tracking")
             self.mt = track_mouse.MouseTracker(self.config.save_folder)
             self.mt.thread.start()
 
         else:
             self.is_tracking = False
-            self.status_lbl.configure(text="Status: Stopped", fg="red")
+            self.status_lbl.configure(text="● Stopped", fg="red")
             self.track_btn.configure(text="Start tracking")
             self.mt.terminate()
             self.mt.thread.join()
@@ -111,8 +111,12 @@ class MainWindow:
 
     def show_popup(self):
         popup = tk.Toplevel(self.parent)
-        popup.title("SMT Draw stuff")
+        popup.title("Export/Show")
         popup.tk.call('wm', 'iconphoto', popup._w, self.icon)
+        x = self.parent.winfo_x()
+        y = self.parent.winfo_y()
+        popup.geometry("+"+str(x-80)+"+"+str(y))
+        popup.resizable(False, False)
 
         popup_input = tk.Entry(popup, textvariable=self.selected_file)
 
@@ -148,6 +152,8 @@ class MainWindow:
         popup_select_btn.grid(row=0, column=1, sticky="ew")
         popup_export_btn.grid(row=1, column=0, sticky="ew")
         popup_show_tracked_btn.grid(row=1, column=1, sticky="ew")
+
+        popup.grab_set()
 
 
     def draw_stuff(self):
