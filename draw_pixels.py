@@ -1,6 +1,6 @@
 from PIL import Image, ImageDraw
 
-def draw(coordinates_file, screen_size):
+def draw(coordinates_file, screen_size, export=False):
     # Create image
     img = Image.new('RGBA', screen_size, (255,255,255,0))
     draw = ImageDraw.Draw(img)
@@ -16,7 +16,10 @@ def draw(coordinates_file, screen_size):
             prev_pos = curr_pos
 
         cf.close()
-        img.save(coordinates_file.split(".")[0] + ".png")
+        if export:
+            img.save(coordinates_file.split(".")[0] + ".png")
+        else:
+            img.show(coordinates_file)
 
     except:
         print("File is empty or has bad contents!")

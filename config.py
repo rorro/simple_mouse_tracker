@@ -1,7 +1,6 @@
 from pathlib import Path
 
 class Config():
-
     def __init__(self):
         self.CONFIG_FILE = str(Path.home()) + "/" + ".simplemousetracker"
 

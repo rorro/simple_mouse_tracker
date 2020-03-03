@@ -1,6 +1,5 @@
 import tkinter as tk
-from tkinter import filedialog
-from tkinter import PhotoImage
+from tkinter import filedialog, PhotoImage, StringVar
 
 from system_hotkey import SystemHotkey
 
@@ -23,13 +22,22 @@ class MainWindow:
         parent.title("SMT")
         parent.resizable(False, False)
 
-        icon = PhotoImage(file="icon.png")
-        parent.tk.call('wm', 'iconphoto', parent._w, icon)
+        self.icon = PhotoImage(file="icon.png")
+        parent.tk.call('wm', 'iconphoto', parent._w, self.icon)
 
-        self.screen_size = (parent.winfo_screenwidth(), parent.winfo_screenheight())
+        self.screen_size = (parent.winfo_screenwidth(),
+                parent.winfo_screenheight())
 
-        self.status_lbl = tk.Label(parent, text="Status: Stopped", fg="red", bg="#FFFFFF")
+        self.status_lbl = tk.Label(parent,
+                text="Status: Stopped",
+                fg="red",
+                bg="#d9d9d9",
+                relief=tk.SUNKEN)
+
         self.status_lbl.pack(side=(tk.BOTTOM), fill=tk.X)
+
+        self.selected_file = StringVar()
+        self.selected_file.set("Select file...")
 
         self.track_btn = tk.Button(parent,
                 text="Start tracking",
@@ -45,7 +53,7 @@ class MainWindow:
         self.track_btn.pack(fill=tk.X)
 
         self.draw_btn = tk.Button(parent,
-                text="Draw stuff",
+                text="Export/Show",
                 command=self.draw_stuff,
                 bg="#0097A7",
                 fg="#FFFFFF",
@@ -66,6 +74,7 @@ class MainWindow:
 
         self.quit_btn.pack(fill=tk.X)
 
+
     def start_tracking(self, event=""):
         if not self.is_tracking:
             self.is_tracking = True
@@ -81,16 +90,71 @@ class MainWindow:
             self.mt.terminate()
             self.mt.thread.join()
 
-    def draw_stuff(self, event=""):
+
+    def export_png(self):
+        draw_pixels.draw(self.selected_file.get(), self.screen_size, True)
+
+
+    def show_tracked(self):
+        draw_pixels.draw(self.selected_file.get(), self.screen_size)
+
+
+    def select_file(self):
         file_path = filedialog.askopenfilename(
                 initialdir = self.config.save_folder,
                 title = "Select file",
                 filetypes = (("Tracked","*.tracked"),))
 
         if file_path:
-            draw_pixels.draw(file_path, self.screen_size)
+            self.selected_file.set(file_path)
 
-    def quit(self, event=""):
+
+    def show_popup(self):
+        popup = tk.Toplevel(self.parent)
+        popup.title("SMT Draw stuff")
+        popup.tk.call('wm', 'iconphoto', popup._w, self.icon)
+
+        popup_input = tk.Entry(popup, textvariable=self.selected_file)
+
+        popup_select_btn = tk.Button(popup,
+                text="Select file",
+                command=self.select_file,
+                bg="#0097A7",
+                fg="#FFFFFF",
+                relief=tk.FLAT,
+                activebackground="#0087A7",
+                activeforeground="#FFFFFF")
+
+        popup_export_btn = tk.Button(popup,
+                text="Export png",
+                command=self.export_png,
+                bg="#0097A7",
+                fg="#FFFFFF",
+                relief=tk.FLAT,
+                activebackground="#0087A7",
+                activeforeground="#FFFFFF")
+
+
+        popup_show_tracked_btn = tk.Button(popup,
+                text="Show tracked",
+                command=self.show_tracked,
+                bg="#0097A7",
+                fg="#FFFFFF",
+                relief=tk.FLAT,
+                activebackground="#0087A7",
+                activeforeground="#FFFFFF")
+
+        popup_input.grid(row=0, column=0, sticky="news")
+        popup_select_btn.grid(row=0, column=1, sticky="ew")
+        popup_export_btn.grid(row=1, column=0, sticky="ew")
+        popup_show_tracked_btn.grid(row=1, column=1, sticky="ew")
+
+
+    def draw_stuff(self):
+        self.show_popup()
+
+
+    def quit(self):
         if self.is_tracking:
             self.is_tracking = False
             self.mt.terminate()

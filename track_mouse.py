@@ -20,6 +20,7 @@ class MouseTracker():
 
         self.tracked = 0
 
+
     def start(self):
         self.running = True
         last_pos = (-1,-1)
