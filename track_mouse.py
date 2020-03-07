@@ -13,16 +13,19 @@ class MouseTracker():
                 now.hour,
                 now.minute,
                 now.second)
+
         self.mouse = PyMouse()
 
-        self.running = False
+        self.tracking = False
+        self.paused = False
         self.thread = threading.Thread(target=self.start)
 
         self.tracked = 0
+        self.sf = None
 
 
     def start(self):
-        self.running = True
+        self.tracking = True
         last_pos = (-1,-1)
 
         if self.save_folder:
@@ -32,20 +35,21 @@ class MouseTracker():
 
         try:
 
-            sf = open(file_path, "a")
-            while self.running:
-                mouse_x, mouse_y = self.mouse.position()
+            self.sf = open(file_path, 'a')
+            while self.tracking:
+                if not self.paused:
+                    mouse_x, mouse_y = self.mouse.position()
 
-                if last_pos != (mouse_x, mouse_y):
-                    sf.write(str(mouse_x)+","+str(mouse_y)+"\n")
-                    last_pos = (mouse_x, mouse_y)
-                    self.tracked+=1
+                    if last_pos != (mouse_x, mouse_y):
+                        self.sf.write(str(mouse_x) + ',' + str(mouse_y)+"\n")
+                        last_pos = (mouse_x, mouse_y)
+                        self.tracked += 1
 
-            sf.close()
+            self.sf.close()
         except FileNotFoundError:
             print("Save folder does not exist.")
 
-
     def terminate(self):
-        self.running = False
+        self.tracking = False
+        self.paused = False
 

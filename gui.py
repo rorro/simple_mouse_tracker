@@ -12,9 +12,12 @@ class MainWindow:
         self.config = config.Config()
         self.mt = track_mouse.MouseTracker()
 
+        # Key bindings
         self.hk = SystemHotkey()
         self.hk.register(self.config.start_tracking_binding,
                 callback=self.start_tracking)
+        self.hk.register(self.config.pause_tracking_binding,
+                callback=self.pause_tracking)
 
         self.is_tracking = False
 
@@ -82,13 +85,22 @@ class MainWindow:
             self.track_btn.configure(text="Stop tracking")
             self.mt = track_mouse.MouseTracker(self.config.save_folder)
             self.mt.thread.start()
-
         else:
             self.is_tracking = False
             self.status_lbl.configure(text="● Stopped", fg="red")
             self.track_btn.configure(text="Start tracking")
             self.mt.terminate()
             self.mt.thread.join()
+
+    def pause_tracking(self, event=""):
+        if self.is_tracking:
+            if not self.mt.paused:
+                self.mt.paused = True
+                self.mt.sf.write("paused\n")
+                self.status_lbl.configure(text="● Paused", fg="blue")
+            else:
+                self.mt.paused = False
+                self.status_lbl.configure(text="● Tracking", fg="green")
 
 
     def export_png(self):

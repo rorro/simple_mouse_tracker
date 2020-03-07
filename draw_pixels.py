@@ -10,7 +10,11 @@ def draw(coordinates_file, screen_size, export=False):
         prev_pos = format_pos(cf.readline())
 
         for line in cf:
-            curr_pos = format_pos(line)
+            if line.rstrip() == "paused":
+                prev_pos = format_pos(cf.readline())
+                curr_pos = format_pos(cf.readline())
+            else:
+                curr_pos = format_pos(line)
 
             draw.line((prev_pos, curr_pos), fill="black")
             prev_pos = curr_pos
