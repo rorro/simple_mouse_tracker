@@ -22,6 +22,7 @@ class MouseTracker():
 
         self.tracked = 0
         self.sf = None
+        self.is_last_paused = False
 
 
     def start(self):
@@ -42,6 +43,7 @@ class MouseTracker():
 
                     if last_pos != (mouse_x, mouse_y):
                         self.sf.write(str(mouse_x) + ',' + str(mouse_y)+"\n")
+                        self.is_last_paused = False
                         last_pos = (mouse_x, mouse_y)
                         self.tracked += 1
 

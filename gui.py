@@ -96,10 +96,13 @@ class MainWindow:
         if self.is_tracking:
             if not self.mt.paused:
                 self.mt.paused = True
-                self.mt.sf.write("paused\n")
                 self.status_lbl.configure(text="● Paused", fg="blue")
             else:
                 self.mt.paused = False
+                if not self.mt.is_last_paused:
+                    self.mt.sf.write("paused\n")
+                    self.mt.is_last_paused = True
+
                 self.status_lbl.configure(text="● Tracking", fg="green")
 
 
