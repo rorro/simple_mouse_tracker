@@ -55,6 +55,19 @@ class MainWindow:
         self.track_btn.grid_propagate(False)
         self.track_btn.pack(fill=tk.X)
 
+        self.pause_btn = tk.Button(parent,
+                text="Pause",
+                command=self.pause_tracking,
+                state="disabled",
+                bg="#0097A7",
+                fg="#FFFFFF",
+                relief=tk.FLAT,
+                activebackground="#0087A7",
+                activeforeground="#FFFFFF",
+                width=10)
+
+        self.pause_btn.pack(fill=tk.X)
+
         self.draw_btn = tk.Button(parent,
                 text="Export/Show",
                 command=self.draw_stuff,
@@ -83,12 +96,14 @@ class MainWindow:
             self.is_tracking = True
             self.status_lbl.configure(text="● Tracking", fg="green")
             self.track_btn.configure(text="Stop tracking")
+            self.pause_btn.configure(state="normal")
             self.mt = track_mouse.MouseTracker(self.config.save_folder)
             self.mt.thread.start()
         else:
             self.is_tracking = False
             self.status_lbl.configure(text="● Stopped", fg="red")
             self.track_btn.configure(text="Start tracking")
+            self.pause_btn.configure(state="disabled")
             self.mt.terminate()
             self.mt.thread.join()
 
@@ -97,8 +112,10 @@ class MainWindow:
             if not self.mt.paused:
                 self.mt.paused = True
                 self.status_lbl.configure(text="● Paused", fg="blue")
+                self.pause_btn.configure(text="Resume")
             else:
                 self.mt.paused = False
+                self.pause_btn.configure(state="normal", text="Pause")
                 if not self.mt.is_last_paused:
                     self.mt.sf.write("paused\n")
                     self.mt.is_last_paused = True
