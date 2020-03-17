@@ -15,6 +15,7 @@ A simple program to track mouse movements.
 
 ## Features
 - Record mouse movements
+- Pause/resume while tracking
 - Draw recorded mouse path using PIL
 
 ## Config
@@ -24,6 +25,9 @@ Default config `.simplemousetracker` will be created in `~` if none exists.
 # Valid modifiers: control, shift, super (windows key), alt.
 # Read more about valid bindings at https://github.com/timeyyy/system_hotkey
 start_tracking=control-s
+
+# The keybinding for pausing/resuming the mouse tracking.
+pause_tracking=control-p
 
 # Where to save the tracked files. Leave blank to save in same folder as
 # the script. The path should be absolute.
