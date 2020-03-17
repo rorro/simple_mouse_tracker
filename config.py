@@ -17,6 +17,10 @@ class Config():
                 "# the script. The path should be absolute.",
                 "# If folder doesn't exist, nothing will be saved.",
                 "save_folder=",
+                "",
+                "# Save tracking data longterm.",
+                "# 1 for true and 0 for false",
+                "track_data=0",
                 ]
 
         # Default config values.
@@ -25,6 +29,7 @@ class Config():
         self.start_tracking_binding = ("control", "s")
         self.pause_tracking_binding = ("control", "p")
         self.save_folder = ""
+        self.track_data = 0
 
         if not Path(self.CONFIG_FILE).is_file():
             print("Config file doesn't exist. Creating default.")
@@ -57,6 +62,8 @@ class Config():
                         self.pause_tracking_binding = tuple(keys)
                 elif lhs == "save_folder":
                     self.save_folder = rhs
+                elif lhs == "track_data":
+                    self.track_data = int(rhs)
 
             config.close()
 

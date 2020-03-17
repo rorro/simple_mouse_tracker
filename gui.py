@@ -6,6 +6,7 @@ from system_hotkey import SystemHotkey
 import config
 import track_mouse
 import draw_pixels
+import statistics
 
 class MainWindow:
     def __init__(self, parent):
@@ -24,25 +25,32 @@ class MainWindow:
         self.parent = parent
         parent.title("SMT")
         parent.resizable(False, False)
+        #parent.geometry("400x135")
+
+        self.buttons_pane = tk.Frame(self.parent)
+        self.buttons_pane.grid(column=0, row=0)
+
+        self.info_pane = tk.Frame(self.parent, width=100, height=30)
+        self.info_pane.grid(column=1, row=0, sticky="ns")
 
         self.icon = PhotoImage(file="icon.png")
-        parent.tk.call('wm', 'iconphoto', parent._w, self.icon)
+        self.parent.tk.call('wm', 'iconphoto', self.parent._w, self.icon)
 
-        self.screen_size = (parent.winfo_screenwidth(),
-                parent.winfo_screenheight())
+        self.screen_size = (self.parent.winfo_screenwidth(),
+                self.parent.winfo_screenheight())
 
-        self.status_lbl = tk.Label(parent,
+        self.status_lbl = tk.Label(self.parent,
                 text="● Stopped",
                 fg="red",
                 bg="#d9d9d9",
                 relief=tk.SUNKEN)
 
-        self.status_lbl.pack(side=(tk.BOTTOM), fill=tk.X)
+        self.status_lbl.grid(column=0, row=1, columnspan=2, sticky="ew")
 
         self.selected_file = StringVar()
         self.selected_file.set("Select file...")
 
-        self.track_btn = tk.Button(parent,
+        self.track_btn = tk.Button(self.buttons_pane,
                 text="Start tracking",
                 command=self.start_tracking,
                 bg="#0097A7",
@@ -52,10 +60,10 @@ class MainWindow:
                 activeforeground="#FFFFFF",
                 width=10)
 
-        self.track_btn.grid_propagate(False)
-        self.track_btn.pack(fill=tk.X)
+        #self.track_btn.grid_propagate(False)
+        self.track_btn.pack()
 
-        self.pause_btn = tk.Button(parent,
+        self.pause_btn = tk.Button(self.buttons_pane,
                 text="Pause",
                 command=self.pause_tracking,
                 state="disabled",
@@ -66,29 +74,31 @@ class MainWindow:
                 activeforeground="#FFFFFF",
                 width=10)
 
-        self.pause_btn.pack(fill=tk.X)
+        self.pause_btn.pack()
 
-        self.draw_btn = tk.Button(parent,
+        self.draw_btn = tk.Button(self.buttons_pane,
                 text="Export/Show",
                 command=self.draw_stuff,
                 bg="#0097A7",
                 fg="#FFFFFF",
                 relief=tk.FLAT,
                 activebackground="#0087A7",
-                activeforeground="#FFFFFF")
+                activeforeground="#FFFFFF",
+                width=10)
 
-        self.draw_btn.pack(fill=tk.X)
+        self.draw_btn.pack()
 
-        self.quit_btn = tk.Button(parent,
+        self.quit_btn = tk.Button(self.buttons_pane,
                 text="Quit",
                 command=self.quit,
                 bg="#0097A7",
                 fg="#FFFFFF",
                 relief=tk.FLAT,
                 activebackground="#0087A7",
-                activeforeground="#FFFFFF")
+                activeforeground="#FFFFFF",
+                width=10)
 
-        self.quit_btn.pack(fill=tk.X)
+        self.quit_btn.pack()
 
 
     def start_tracking(self, event=""):
@@ -104,6 +114,8 @@ class MainWindow:
             self.status_lbl.configure(text="● Stopped", fg="red")
             self.track_btn.configure(text="Start tracking")
             self.pause_btn.configure(state="disabled")
+            statistics.get_config(self.config)
+            statistics.create_file()
             self.mt.terminate()
             self.mt.thread.join()
 
