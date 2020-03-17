@@ -1,0 +1,8 @@
+[Desktop Entry]
+Encoding=UTF-8
+Version=1.0
+Type=Application
+Terminal=false
+Exec=/home/robin/Documents/python/simple_mouse_tracker/run.sh
+Name=Simple Mouse Tracker
+Icon=/home/robin/Documents/python/simple_mouse_tracker/icon.png

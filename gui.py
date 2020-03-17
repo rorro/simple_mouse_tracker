@@ -2,6 +2,7 @@ import tkinter as tk
 from tkinter import filedialog, PhotoImage, StringVar
 
 from system_hotkey import SystemHotkey
+from pathlib import Path
 
 import config
 import track_mouse
@@ -25,7 +26,7 @@ class MainWindow:
         parent.title("SMT")
         parent.resizable(False, False)
 
-        self.icon = PhotoImage(file="icon.png")
+        self.icon = PhotoImage(file=Path(__file__).parent / "icon.png")
         parent.tk.call('wm', 'iconphoto', parent._w, self.icon)
 
         self.screen_size = (parent.winfo_screenwidth(),

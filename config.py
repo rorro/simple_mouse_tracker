@@ -2,7 +2,9 @@ from pathlib import Path
 
 class Config():
     def __init__(self):
-        self.CONFIG_FILE = str(Path.home()) + "/" + ".simplemousetracker"
+        self.SCRIPT_FOLDER_PATH = str(Path(__file__).parent)
+        self.HOME_FOLDER = str(Path.home())
+        self.CONFIG_FILE = self.HOME_FOLDER + "/" + ".simplemousetracker"
 
         self.DEFAULT_CONFIG = [
                 "# The keybinding for starting/stopping the mouse tracking.",
@@ -24,7 +26,7 @@ class Config():
         # file is not configured correctly.
         self.start_tracking_binding = ("control", "s")
         self.pause_tracking_binding = ("control", "p")
-        self.save_folder = ""
+        self.save_folder = self.SCRIPT_FOLDER_PATH
 
         if not Path(self.CONFIG_FILE).is_file():
             print("Config file doesn't exist. Creating default.")
