@@ -1,6 +1,7 @@
 from pymouse import PyMouse
 import threading
 from datetime import datetime
+import time
 
 class MouseTracker():
     def __init__(self, save_folder=""):
@@ -40,9 +41,11 @@ class MouseTracker():
             while self.tracking:
                 if not self.paused:
                     mouse_x, mouse_y = self.mouse.position()
+                    now = time.time()
+
 
                     if last_pos != (mouse_x, mouse_y):
-                        self.sf.write(str(mouse_x) + ',' + str(mouse_y)+"\n")
+                        self.sf.write(str(mouse_x) + ',' + str(mouse_y) + "," + str(now) + "\n")
                         self.is_last_paused = False
                         last_pos = (mouse_x, mouse_y)
                         self.tracked += 1
