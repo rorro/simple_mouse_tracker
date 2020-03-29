@@ -23,7 +23,7 @@ SPEED_LIMIT = 5000
 GRADIENT_SIZE = len(GRADIENT)
 SPEED_GRADER = SPEED_LIMIT/GRADIENT_SIZE
 
-def draw(coordinates_file, screen_size, export=False):
+def draw(coordinates_file, screen_size, colored_speed, line_color, export):
     # Create image
     img = Image.new('RGBA', screen_size, (255,255,255,0))
     draw = ImageDraw.Draw(img)
@@ -49,15 +49,18 @@ def draw(coordinates_file, screen_size, export=False):
             curr_pos = (curr_line[0], curr_line[1])
             curr_time = curr_line[2]
 
-        speed = get_speed(prev_pos[0], prev_pos[1], prev_time,
-                            curr_pos[0], curr_pos[1], curr_time)
+        if colored_speed:
+            speed = get_speed(prev_pos[0], prev_pos[1], prev_time,
+                                curr_pos[0], curr_pos[1], curr_time)
 
-        color_index = int(speed/SPEED_GRADER)
+            color_index = int(speed/SPEED_GRADER)
 
-        if color_index >= GRADIENT_SIZE:
-            color_index = GRADIENT_SIZE-1
+            if color_index >= GRADIENT_SIZE:
+                color_index = GRADIENT_SIZE-1
 
-        color = ImageColor.getrgb(GRADIENT[color_index])
+            color = ImageColor.getrgb(GRADIENT[color_index])
+        else:
+            color = ImageColor.getrgb(line_color)
 
         draw.line((prev_pos, curr_pos), fill=color)
         prev_pos = curr_pos

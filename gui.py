@@ -125,11 +125,21 @@ class MainWindow:
 
 
     def export_png(self):
-        draw_pixels.draw(self.selected_file.get(), self.screen_size, True)
+        draw_pixels.draw(
+                self.selected_file.get(),
+                self.screen_size,
+                self.config.colored_speed,
+                self.config.default_color,
+                True)
 
 
     def show_tracked(self):
-        draw_pixels.draw(self.selected_file.get(), self.screen_size)
+        draw_pixels.draw(
+                self.selected_file.get(),
+                self.screen_size,
+                self.config.colored_speed,
+                self.config.default_color,
+                False)
 
 
     def select_file(self):

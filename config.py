@@ -15,10 +15,20 @@ class Config():
                 "# The keybinding for pausing/resuming the mouse tracking.",
                 "pause_tracking=control-p",
                 "",
-                "# Where to save the tracked files. Leave blank to save in same folder as",
-                "# the script. The path should be absolute.",
+                "# Where to save the tracked files. Leave blank to save in same",
+                "# folder as the script. The path should be absolute.",
                 "# If folder doesn't exist, nothing will be saved.",
                 "save_folder=",
+                "",
+                "# Colored lines when exporting/showing tracked data.",
+                "# Only true is true, everything else is false.",
+                "colored_speed=true",
+                "",
+                "# Default color for drawing tracked data.",
+                "# Only applies when colored_speed is set to false.",
+                "default_color=#000000",
+                "",
+                "",
                 ]
 
         # Default config values.
@@ -27,6 +37,8 @@ class Config():
         self.start_tracking_binding = ("control", "s")
         self.pause_tracking_binding = ("control", "p")
         self.save_folder = self.SCRIPT_FOLDER_PATH
+        self.colored_speed = True
+        self.default_color = "#000000"
 
         if not Path(self.CONFIG_FILE).is_file():
             print("Config file doesn't exist. Creating default.")
@@ -59,6 +71,11 @@ class Config():
                         self.pause_tracking_binding = tuple(keys)
                 elif lhs == "save_folder":
                     self.save_folder = rhs
+                elif lhs == "colored_speed":
+                    if rhs != "true":
+                        self.colored_speed = False
+                elif lhs == "default_color":
+                    self.default_color = rhs
 
             config.close()
 

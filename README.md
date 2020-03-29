@@ -33,4 +33,12 @@ pause_tracking=control-p
 # the script. The path should be absolute.
 # If folder doesn't exist, nothing will be saved.
 save_folder=
+
+# Colored lines when exporting/showing tracked data.
+# Only true is true, everything else is false.
+colored_speed=true
+
+# Default color for drawing tracked data.
+# Only applies when colored_speed is set to false.
+default_color=#000000
 ```
