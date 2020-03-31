@@ -41,3 +41,6 @@ colored_speed=true
 # Only applies when colored_speed is set to false.
 default_color=#000000
 ```
+
+## Example
+![An example](example.png)
