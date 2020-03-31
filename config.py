@@ -27,8 +27,6 @@ class Config():
                 "# Default color for drawing tracked data.",
                 "# Only applies when colored_speed is set to false.",
                 "default_color=#000000",
-                "",
-                "",
                 ]
 
         # Default config values.
@@ -70,7 +68,10 @@ class Config():
                     else:
                         self.pause_tracking_binding = tuple(keys)
                 elif lhs == "save_folder":
-                    self.save_folder = rhs
+                    if rhs:
+                        self.save_folder = rhs
+                    else:
+                        self.save_folder = self.SCRIPT_FOLDER_PATH
                 elif lhs == "colored_speed":
                     if rhs != "true":
                         self.colored_speed = False

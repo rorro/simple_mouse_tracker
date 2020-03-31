@@ -4,7 +4,7 @@ from datetime import datetime
 import time
 
 class MouseTracker():
-    def __init__(self, save_folder=""):
+    def __init__(self, save_folder):
         now = datetime.now()
         self.save_folder = save_folder
         self.file_name = "mouse_track-{}{}{}_{}{}{}.tracked".format(
@@ -30,13 +30,9 @@ class MouseTracker():
         self.tracking = True
         last_pos = (-1,-1)
 
-        if self.save_folder:
-            file_path = self.save_folder + "/" + self.file_name
-        else:
-            file_path = self.file_name
+        file_path = self.save_folder + "/" + self.file_name
 
         try:
-
             self.sf = open(file_path, 'a')
             while self.tracking:
                 if not self.paused:

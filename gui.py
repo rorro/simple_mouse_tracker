@@ -11,7 +11,8 @@ import draw_pixels
 class MainWindow:
     def __init__(self, parent):
         self.config = config.Config()
-        self.mt = track_mouse.MouseTracker()
+        print(self.config.save_folder)
+        self.mt = track_mouse.MouseTracker("")
 
         # Key bindings
         self.hk = SystemHotkey()
