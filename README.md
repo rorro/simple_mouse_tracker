@@ -6,11 +6,10 @@ A simple program to track mouse movements.
 ## Getting started
 - Use Linux
 - Use Python 3+
-- Install following dependencies:
-  - tkinter
-  - PIL
-  - System Hotkey
+- Install tkinter
 - Download or clone the project
+- Go to project folder
+- Run `sudo pip install -r requirements.txt`
 - Run the program using `python gui.py`
 
 ## Features
