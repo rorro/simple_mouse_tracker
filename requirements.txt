@@ -1,0 +1,4 @@
+system_hotkey==1.0.3
+PyUserInput==0.1.11
+Pillow==7.0.0
+pymouse==1.0
